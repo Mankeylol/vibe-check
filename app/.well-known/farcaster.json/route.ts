@@ -26,7 +26,7 @@ export async function GET() {
       subtitle: process.env.NEXT_PUBLIC_APP_SUBTITLE,
       description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
       screenshotUrls: [],
-      iconUrl: process.env.NEXT_PUBLIC_APP_ICON,
+      iconUrl: process.env.NEXT_PUBLIC_APP_ICON || "https://vibe-check-eta-eight.vercel.app/icon.png",
       splashImageUrl: process.env.NEXT_PUBLIC_APP_SPLASH_IMAGE,
       splashBackgroundColor: process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR,
       homeUrl: URL,
