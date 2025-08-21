@@ -28,10 +28,16 @@ export default function App() {
   async function fetchCasts() {
     setLoading(true);
     try {
-      const user = (await sdk.context).user.fid;
-      const response = await fetch(`/api/casts?fid=${encodeURIComponent(user)}`);
+      const context = await sdk.context;
+      const user = context?.user;
+      const response = await fetch(`/api/casts?fid=${encodeURIComponent(user?.fid)}`);
       if (!response.ok) throw new Error("Failed to fetch casts");
       const data = await response.json();
+      if (!user) {
+        console.error("No user found in MiniApp context");
+        setLoading(false);
+        return;
+      }
 
       const casts: Cast[] = data.result.casts.map((cast: any) => {
         const likes = cast.reactions?.count || 0;
