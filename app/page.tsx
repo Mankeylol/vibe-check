@@ -19,21 +19,25 @@ interface Cast {
 export default function App() {
   const [mostInteractedCast, setMostInteractedCast] = useState<Cast | null>(null);
   const [loading, setLoading] = useState(false);
+  const [fid, setFid] = useState<number | null>(null);
 
   useEffect(() => {
     sdk.actions.ready();
     sdk.back.enableWebNavigation();
+  
+    (async () => {
+      const context = await sdk.context;
+      setFid(context.user?.fid ?? null);
+    })();
   }, []);
 
   async function fetchCasts() {
     setLoading(true);
     try {
-      const context = await sdk.context;
-      const user = context?.user;
-      const response = await fetch(`/api/casts?fid=${encodeURIComponent(user?.fid)}`);
+      const response = await fetch(`/api/casts?fid=${encodeURIComponent(fid ?? "")}`);
       if (!response.ok) throw new Error("Failed to fetch casts");
       const data = await response.json();
-      if (!user) {
+      if (!fid) {
         console.error("No user found in MiniApp context");
         setLoading(false);
         return;
