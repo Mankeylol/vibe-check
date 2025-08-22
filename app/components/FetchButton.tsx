@@ -9,7 +9,7 @@ export default function FetchButton({
 }) {
     return (<>
         <div className="flex justify-center items-center flex-col" >
-            <h1 className="text-lg font-bold mb-[100px]">Check your most engaged Cast</h1>
+            <h1 className="text-lg font-bold mb-[100px]">Check your most engaged cast</h1>
             <div>
                 <button
                     onClick={onClick}
