@@ -14,6 +14,9 @@ interface Cast {
   recasts: number;
   replies: number;
   totalInteractions: number;
+  author: {
+    username: string;
+  };
 }
 
 export default function App() {
@@ -27,21 +30,21 @@ export default function App() {
   
     (async () => {
       const context = await sdk.context;
-      setFid(context.user?.fid ?? null);
+      //setFid(context.user?.fid ?? null);
     })();
   }, []);
 
   async function fetchCasts() {
     setLoading(true);
     try {
-      const response = await fetch(`/api/casts?fid=${encodeURIComponent(fid ?? "")}`);
+      const response = await fetch(`/api/casts?fid=${encodeURIComponent(101)}`);
       if (!response.ok) throw new Error("Failed to fetch casts");
       const data = await response.json();
-      if (!fid) {
-        console.error("No user found in MiniApp context");
-        setLoading(false);
-        return;
-      }
+      // if (!fid) {
+      //   console.error("No user found in MiniApp context");
+      //   setLoading(false);
+      //   return;
+      // }
 
       const casts: Cast[] = data.result.casts.map((cast: any) => {
         const likes = cast.reactions?.count || 0;
@@ -54,7 +57,7 @@ export default function App() {
           images = cast.embeds.images.map((img: any) => img.url);
         }
 
-        return { ...cast, likes, recasts, replies, totalInteractions, embeds: { images } };
+        return { ...cast, likes, recasts, replies, totalInteractions, embeds: { images }, author: { username: cast.author.username } };
       });
 
       const mostInteracted = casts.reduce((max, cast) =>
